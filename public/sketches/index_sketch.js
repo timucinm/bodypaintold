@@ -10,7 +10,7 @@ function setup(){
     const canvas =  createCanvas(640,480);
     layout();
     data = 0;
-    socket = io.connect('http://localhost:3000');
+    socket = io.connect();
     socket.on('button', newDrawing);
 }
 
