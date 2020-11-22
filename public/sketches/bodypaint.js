@@ -30,7 +30,7 @@ let mostPredictedClass = "";
 let valueMostPredictedClass = 0.0;
 
 function setup() {
-  socket = io.connect('http://localhost:3000');
+  socket = io.connect();
   socket.on('mouse', newDrawing);
   // canvas
   const canvas = createCanvas(640, 480);
