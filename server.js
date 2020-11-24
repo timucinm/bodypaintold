@@ -9,7 +9,7 @@ console.log("Hello");
 
 var socket = require('socket.io');
 
-var io = require('socket.io').listen(server);
+var io = socket(server);
 
 io.sockets.on('connection', newConnection);
 
