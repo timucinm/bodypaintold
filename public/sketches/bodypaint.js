@@ -11,6 +11,7 @@ let ex = 0;
 let ey = 0;
 
 let w = 15;
+let o = 1;
 
 var socket;
 
@@ -30,7 +31,8 @@ let mostPredictedClass = "";
 let valueMostPredictedClass = 0.0;
 
 function setup() {
-  socket = io.connect();
+  frameRate(60);
+  socket = io.connect('http://localhost:3000');
   socket.on('mouse', newDrawing);
   // canvas
   const canvas = createCanvas(640, 480);
@@ -75,7 +77,9 @@ function draw() {
   // show predictions KNN classification
   if (predictions.length > 0) {
 
-    /*// loop through labels
+     //loop through labels
+
+    /*//
     for (let i = 0; i < labels.length; i++) {
       const x = 20;
       const y = i * 24 + 20;
@@ -98,11 +102,19 @@ function draw() {
   }
 
 
-  if (mostPredictedClass == "C") {
-    background(255);
-     }
 
-  drawAndSend();
+     if (mostPredictedClass == "C") {
+      w = w + o ;
+       if (w > 40) {
+         o = -1;
+       }
+         if (w < 5) {
+           o = 1;
+         }
+       
+       }
+
+  //drawAndSend();
 }
 
 function drawAndSend(data) {
@@ -125,7 +137,7 @@ function mouseDragged() {
   //sendmouse(ex,ey);
 }
 
-function sendmouse(xpos, ypos) {
+function sendmouse(xpos, ypos,w) {
   // We are sending!
   //console.log("sendmouse: " + xpos + " " + ypos);
   
@@ -133,6 +145,7 @@ function sendmouse(xpos, ypos) {
   var data = {
     x: xpos,
     y: ypos,
+    z: w,
   };
   // Send that object to the socket
   socket.emit('mouse',data);
@@ -141,7 +154,7 @@ function sendmouse(xpos, ypos) {
 function newDrawing(data){
   noStroke();
   fill(255,0,0);
-  ellipse(data.x,data.y,w,w);
+  ellipse(data.x,data.y,data.z,data.z);
 }
 
 
@@ -180,7 +193,7 @@ function drawKeypoints() {
         //ellipse(keypoint.position.x, keypoint.position.y, 10, 10);
       }
       if (keypoint = pose.keypoints[0]) {
-        sendmouse(keypoint.position.x, keypoint.position.y);
+        sendmouse(keypoint.position.x, keypoint.position.y ,w);
         noStroke();
         fill(0);
         ellipse(keypoint.position.x,keypoint.position.y, w, w);
